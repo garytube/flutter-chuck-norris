@@ -25,7 +25,6 @@ class _MyAppState extends State<MyApp> {
       fontStyle: FontStyle.normal,
       textBaseline: TextBaseline.alphabetic);
 
-  final TextStyle _btn = TextStyle(color: Colors.blueAccent, fontSize: 16);
 
   @override
   void initState() {
