@@ -17,6 +17,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Future<Joke> futureAlbum;
+  int _selectedIndex = 0;
   String unsplash =
       'https://source.unsplash.com/random/?v=${new DateTime.now().millisecondsSinceEpoch}';
   final _bigger = TextStyle(
@@ -39,7 +40,12 @@ class _MyAppState extends State<MyApp> {
       futureAlbum = fetchAlbum();
     });
   }
-
+  void _newImg() {
+    int now = new DateTime.now().millisecondsSinceEpoch;
+    setState(() {
+      unsplash = 'https://source.unsplash.com/random/?v=$now';
+    });
+  }
   Widget _imageprovider() {
     return CachedNetworkImage(
       imageUrl: unsplash,
@@ -64,6 +70,23 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  void _onItemTapped(int index) {
+    switch (index) {
+      case 0:
+        _newImg();
+        break;
+      case 1:
+        _reFetch();        
+        break;
+      default:
+        print("nothing");
+        break;
+    }
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -83,6 +106,17 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Colors.blueAccent,
           focusColor: Colors.black,
           label: Text('Fetch More'),
+        ),
+        endDrawer: Drawer(child: _imageprovider(),),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          elevation: 10,
+          onTap: _onItemTapped,
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.cloud_queue), title: Text("Neues Pic")),
+            BottomNavigationBarItem(icon: Icon(Icons.cloud), title: Text("Full Reload")),
+            BottomNavigationBarItem(icon: Icon(Icons.cloud_done), title: Text("Nothing")),
+          ]
         ),
         drawer: Drawer(
           elevation: 20,
